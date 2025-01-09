@@ -1,0 +1,1 @@
+export const logo:string = "/fidellabs_logo.jpg"
