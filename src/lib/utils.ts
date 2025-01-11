@@ -76,3 +76,7 @@ export const getPageNumbers = (page = 1, totalPages = 1) => {
 
   return pageNumbers;
 };
+
+export const bookmarked = (bookmarks: any[], bookKey:string) => {
+  return bookmarks.some((book) => book?.key === bookKey)
+};

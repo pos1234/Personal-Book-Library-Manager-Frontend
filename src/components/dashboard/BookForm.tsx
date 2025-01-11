@@ -13,17 +13,18 @@ interface FormData {
     author?: string;
     isbn?: string;
     readStatus?: boolean;
-    userRating?: number;
+    rating?: number;
     notes?: string;
   };
+  submit:(data:any)=>void,
+  loadingState:boolean;
 }
-const BookForm = ({ data }: FormData) => {
+const BookForm = ({ data,loadingState,submit }: FormData) => {
   const [formData, setFormData] = React.useState({
     title: data?.title || "",
     author: data?.author || "",
-    isbn: data?.isbn || "",
     readStatus: data?.readStatus || false,
-    userRating: data?.userRating || 0,
+    rating: data?.rating || 0,
     notes: data?.notes || "",
   });
 
@@ -62,22 +63,20 @@ const BookForm = ({ data }: FormData) => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      console.log("Form Data Submitted:", formData);
-      // Perform your submission logic here
+      submit(formData)
     }
   };
 
   const handleStarClick = (rating: number) => {
-    setFormData((prev) => ({ ...prev, userRating: rating }));
-    setError((prev) => ({ ...prev, userRating: "" })); // Clear any existing error
+    setFormData((prev) => ({ ...prev, rating }));
+    setError((prev) => ({ ...prev, rating: "" })); // Clear any existing error
   };
   const handleClear = () => {
     setFormData({
       title: "",
       author: "",
-      isbn: "",
       readStatus: false,
-      userRating: 0,
+      rating: 0,
       notes: "",
     });
     setError({
@@ -115,15 +114,6 @@ const BookForm = ({ data }: FormData) => {
             )}
           </div>
           <div className="space-y-1">
-            <Label htmlFor="isbn">ISBN</Label>
-            <Input
-              id="isbn"
-              name="isbn"
-              value={formData.isbn}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="space-y-1">
             <Label htmlFor="readStatus">Read Status</Label>
             <div className="flex items-center space-x-2">
               <Switch
@@ -146,7 +136,7 @@ const BookForm = ({ data }: FormData) => {
                 <Star
                   key={index}
                   className={`h-6 w-6 cursor-pointer ${
-                    formData.userRating > index
+                    formData.rating > index
                       ? "text-yellow-500"
                       : "text-gray-300"
                   }`}
@@ -166,10 +156,10 @@ const BookForm = ({ data }: FormData) => {
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button variant="secondary" onClick={handleClear}>
+          <Button disabled={loadingState} variant="secondary" onClick={handleClear}>
             Clear
           </Button>
-          <Button onClick={handleSubmit}>Submit</Button>
+          <Button disabled={loadingState} variant={loadingState ? "secondary" : 'default'} onClick={handleSubmit}>Submit</Button>
         </CardFooter>
       </Card>
     </div>

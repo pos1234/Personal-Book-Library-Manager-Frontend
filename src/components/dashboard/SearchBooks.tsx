@@ -1,4 +1,4 @@
-import { fetchBooks } from "@/repository/book-repo";
+import { fetchBookmarks, fetchBooks } from "@/repository/book-repo";
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import {
 import Image from "next/image";
 import SearchInput from "./SearchInput";
 import Pagination from "./Pagination";
-import { getPageNumbers } from "@/lib/utils";
+import { bookmarked, getPageNumbers } from "@/lib/utils";
 import { FileImage } from "lucide-react";
 import AddBook from "./AddBook";
 type pageParams = {
@@ -22,8 +22,9 @@ const SearchBooks = async ({ searchParams }: pageParams) => {
       ? Number(searchParams.page)
       : searchParams?.page ?? 1;
   const query = searchParams?.query || "";
-  const fetchedBooks = await fetchBooks(query, page, 8);
-  const pageNumbers = getPageNumbers(page, fetchedBooks?.numFound);
+  const books = await fetchBooks(query, page, 13);
+  const bookmarks = await fetchBookmarks()  
+  const pageNumbers = getPageNumbers(page, books?.numFound);
   return (
     <main className="my-10 px-10">
       <div className="w-full flex justify-center pb-10">
@@ -31,19 +32,23 @@ const SearchBooks = async ({ searchParams }: pageParams) => {
           <SearchInput />
         </div>
       </div>
-      <div className="flex flex-wrap gap-5 mt-5">
-        {fetchedBooks &&
-          fetchedBooks?.docs &&
-          fetchedBooks?.docs.map((book: any, index: number) => {
+      <div className="flex flex-wrap sm:mt-5">
+        {books &&
+          books?.docs &&
+          books?.docs.map((book: any, index: number) => {
             const coverId = book?.cover_i;
             const formData = {
               title: book?.title || "",
               author: book?.author_name[0] || "",
               isbn: book?.isbn[0] || "",
-              cover: book?.cover_i,
+              coverId: book?.cover_i,
+            key:book?.key
             };
             return (
-              <Card className="w-[250px]" key={index}>
+              <>
+              { !bookmarked(bookmarks?.data,book?.key) && 
+              <div className="w-full p-5 md:w-1/2 xl:w-1/3 2xl:w-1/4">
+              <Card key={index}>
                 <CardHeader className=" flex items-center justify-center">
                   <CardTitle className="min-h-[200px] items-center flex">
                     {coverId && (
@@ -57,7 +62,7 @@ const SearchBooks = async ({ searchParams }: pageParams) => {
                     )}
                     {!coverId && <FileImage />}
                   </CardTitle>
-                  <CardDescription className="px-2 text-center pt-2">
+                  <CardDescription className="px-2  text-center pt-2">
                     {book?.title}
                   </CardDescription>
                 </CardHeader>
@@ -66,6 +71,8 @@ const SearchBooks = async ({ searchParams }: pageParams) => {
                   <AddBook formData={formData} />
                 </CardFooter>
               </Card>
+              </div>}
+              </>
             );
           })}
       </div>
@@ -73,7 +80,7 @@ const SearchBooks = async ({ searchParams }: pageParams) => {
         path="dashboard/add"
         page={page}
         pageNumbers={pageNumbers}
-        totalPages={fetchedBooks?.numFound}
+        totalPages={books?.numFound || 0}
         query={searchParams?.query ?? ""}
       />
     </main>
