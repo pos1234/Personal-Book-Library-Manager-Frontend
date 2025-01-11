@@ -8,6 +8,7 @@ import SidebarNavigation from "@/components/dashboard/SidebarNavigation";
 import Image from "next/image";
 import { logo } from "@/lib/image-constants";
 import SearchBooks from "@/components/dashboard/SearchBooks";
+import Library from "@/components/dashboard/Library";
 
 type pageParams = {
   params: Promise<{
@@ -22,6 +23,8 @@ const page = async ({ params, searchParams }: pageParams) => {
     switch (currentPage?.page) {
       case "add":
         return <SearchBooks searchParams={currentSearchParams}/>;
+      case "library":
+        return <Library searchParams={currentSearchParams}/>;
       //   case "jobs":
       //     return <Jobs searchParams={searchParams} />;
       //   default:

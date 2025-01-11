@@ -95,7 +95,7 @@ const BookForm = ({ data,loadingState,submit }: FormData) => {
               id="title"
               name="title"
               value={formData.title}
-              onChange={handleInputChange}
+              disabled
             />
             {error.title && (
               <p className="text-red-500 text-sm">{error.title}</p>
@@ -107,7 +107,7 @@ const BookForm = ({ data,loadingState,submit }: FormData) => {
               id="author"
               name="author"
               value={formData.author}
-              onChange={handleInputChange}
+              disabled
             />
             {error.author && (
               <p className="text-red-500 text-sm">{error.author}</p>

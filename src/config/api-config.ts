@@ -19,7 +19,7 @@ export async function fetchApi(
 
     const mergedOptions = {
       next: {
-        revalidate: Number(process.env.NEXT_PUBLIC_REVALIDATE_TIME ?? 3600),
+        revalidate: Number(process.env.NEXT_PUBLIC_REVALIDATE_TIME ?? 0),
         tags: ["posts"],
       }, //revalidate the cache at most every hour
       headers: {

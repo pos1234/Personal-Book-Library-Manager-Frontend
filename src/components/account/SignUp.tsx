@@ -6,17 +6,52 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { handleFormSubmit, validateEmail, validatePassword } from "@/lib/utils";
+import { cn, handleFormSubmit } from "@/lib/utils";
+import { signUp } from "@/repository/user-repo";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ email: "", password: "" });
-  const handleSubmit = () => {
-    handleFormSubmit(email, password, setError, (email, password) => {
-      console.log("Signin:", { email, password });
-      // Perform signin logic here
-    });
-  };
+  const { toast } = useToast()
+const [loading,setLoading] = useState(false)
+  const router = useRouter()
+  const handleSubmit =() => {
+    handleFormSubmit(email, password, setError,async (email, password) => {
+      const credendtial = {
+        data:{
+          email,
+          password
+        }
+      }
+     const response = await signUp(credendtial)     
+     if (!response?.error) {
+        // 
+              toast({
+                title: "",
+                description: "Account created successfully",
+                className: cn(
+                  'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-green-200'
+                ),
+              })
+
+              if(typeof window !== undefined){
+                localStorage.setItem('userData',JSON.stringify(response))
+                router.push('/dashboard/add')
+              }
+            }else{
+              setLoading(false)
+              toast({
+                title: "Account not created",
+                description: response?.message,
+                className: cn(
+                  'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-red-200'
+                ),
+              })
+            }
+  }
+)}
 
   const handleClear = () => {
     setEmail("");
@@ -50,10 +85,10 @@ const SignUp = () => {
         </div>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant={"secondary"} onClick={handleClear}>
+        <Button disabled={loading} variant={"secondary"} onClick={handleClear}>
           Clear
         </Button>
-        <Button onClick={handleSubmit}>Signup</Button>
+        <Button disabled={loading} variant={loading ? "secondary" : 'default'} onClick={handleSubmit}>Signup</Button>
       </CardFooter>
     </Card>
   );

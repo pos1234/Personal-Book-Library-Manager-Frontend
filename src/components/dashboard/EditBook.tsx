@@ -6,42 +6,48 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
 import BookForm from "./BookForm";
-import { addBookmark } from "@/repository/book-repo";
+import {updateBookmark } from "@/repository/book-repo";
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils";
 interface BookFormat {
   formData: {
+    id?:number;
     title?: string;
     author?: string;
-    isbn?: string;
+    ISBN?: string;
     coverId?: number;
-    key?:string
+    key?:string;
   };
+  triggerButton?:any
 }
-const AddBook = ({ formData }: BookFormat) => {
+const EditBook = ({ formData,triggerButton }: BookFormat) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [loading,setLoading] = useState(false);
   const { toast } = useToast()
 
   const handleSubmit = async (data: any) => {
     const bookData = {
-       key: formData?.key,
+       key: formData?.key || "",
        coverId:formData?.coverId,
-       ISBN:formData?.isbn, 
-      ...data };
+       ISBN:formData?.ISBN, 
+       author:formData?.author || "",
+      title:formData?.title,
+      readStatus:data?.readStatus,
+      rating:data?.rating,
+      notes:data?.notes};
     
       setLoading(true)
       try {
-      const response = await addBookmark(bookData);
+      const response = await updateBookmark(bookData,formData?.id);
+      console.log(">>> log response",response);
       
       // Close the dialog on successful submission
       if (!response?.error) {
         setDialogOpen(false);
         toast({
           title: "",
-          description: "Book added to library",
+          description: "Book updated",
           className: cn(
             'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-green-200'
           ),
@@ -50,7 +56,7 @@ const AddBook = ({ formData }: BookFormat) => {
         setLoading(false)
         toast({
           title: "",
-          description: "Book not added to library",
+          description: "Book not updated",
           className: cn(
             'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-red-200'
           ),
@@ -63,15 +69,15 @@ const AddBook = ({ formData }: BookFormat) => {
   };
   return (
     <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger className="w-full" onClick={(e) => e.stopPropagation()}>
-        <Button className="w-full">Add to library</Button>
+      <DialogTrigger onClick={(e) => e.stopPropagation()}>
+      {triggerButton}
       </DialogTrigger>
       <DialogContent className="max-h-[80vh] w-fit overflow-y-auto thinScrollBar">
-        <DialogTitle>Add book to library</DialogTitle>
+        <DialogTitle>Edit book from library</DialogTitle>
         <BookForm data={formData} submit={handleSubmit} loadingState={loading}/>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default AddBook;
+export default EditBook;

@@ -1,4 +1,4 @@
-import { fetchApi, postApi } from "@/config/api-config";
+import { deleteApi, fetchApi, patchApi, postApi } from "@/config/api-config";
 
 interface BookFormat {
   docs:{
@@ -18,12 +18,13 @@ interface BookFormat {
 
 export interface BookDataFormat{
     author: string;
-    isbn?: string;
+    ISBN?: string;
     key: string;
     notes?: string;
     readStatus?: boolean;
     title?: string;
     rating?: number; 
+    coverId?:number;
 }
 export const getUserData = ()=>{
   const token = "kajldskjf"
@@ -64,11 +65,25 @@ export const addBookmark = async (data?:BookDataFormat)=>{
  return response
 }
 
-export const fetchBookmarks = async ()=>{
+export const updateBookmark = async (data?:BookDataFormat,id?:number)=>{
+  const {token,userId} = getUserData()  
+ const response = await patchApi(`/bookmarks/user/${userId}/${id}`, data, 'PATCH',token) 
+ return response
+}
+
+export const deleteBookmark = async (id?:number)=>{
+  const {token,userId} = getUserData()  
+ const response = await deleteApi(`/bookmarks/user/${userId}/${id}`,'DELETE',token) 
+ return response
+}
+
+export const fetchBookmarks = async (page?:number,limit?:number,query?:string)=>{
   const {token,userId} = getUserData();
+  const currentPage = page || 1
+  const maxLimit = limit || 8
   const urlParamsObject={
-    page:1,
-    limit:1
+    page:currentPage,
+    limit:maxLimit
   }
  const response = await fetchApi(`/bookmarks/user/${userId}`,token,urlParamsObject) 
  return response
