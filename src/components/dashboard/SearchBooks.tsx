@@ -15,15 +15,16 @@ import { FileImage } from "lucide-react";
 import AddBook from "./AddBook";
 type pageParams = {
   searchParams: { [key: string]: string };
+  userData:any
 };
-const SearchBooks = async ({ searchParams }: pageParams) => {
+const SearchBooks = async ({ searchParams,userData }: pageParams) => {
   const page =
     typeof searchParams?.page === "string"
       ? Number(searchParams.page)
       : searchParams?.page ?? 1;
   const query = searchParams?.query || "";
   const books = await fetchBooks(query, page, 13);
-  const bookmarks = await fetchBookmarks()  
+  const bookmarks = await fetchBookmarks(page,userData)  
   const pageNumbers = getPageNumbers(page, books?.numFound);
   return (
     <main className="my-10 px-10">
@@ -68,7 +69,7 @@ const SearchBooks = async ({ searchParams }: pageParams) => {
                 </CardHeader>
                 <CardContent>Author: {book?.author_name[0]}</CardContent>
                 <CardFooter>
-                  <AddBook formData={formData} />
+                  <AddBook formData={formData} userData={userData}/>
                 </CardFooter>
               </Card>
               </div>}

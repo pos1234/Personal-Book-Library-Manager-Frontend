@@ -24,9 +24,10 @@ interface BookCardProps {
         rating: number
         isRead: boolean
     }
+    userData?:any
 }
 
-export default function BookCard({ bookData }: BookCardProps) {
+export default function BookCard({ bookData ,userData}: BookCardProps) {
     const {title, author, notes, rating, isRead,coverId} = bookData
     const imageUrl = `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`
 
@@ -66,8 +67,8 @@ export default function BookCard({ bookData }: BookCardProps) {
         </div>
         <div className='flex justify-between pt-5'>
             <EditBook 
-            formData={bookData} triggerButton={<Pencil size={15} fill="silver"/>}/>
-            <DeleteBook id={bookData?.id} triggerButton={<X size={17} />}/>
+            formData={bookData} userData={userData} triggerButton={<Pencil size={15} fill="silver"/>}/>
+            <DeleteBook id={bookData?.id} userData={userData} triggerButton={<X size={17} />}/>
         </div>
       </div>
     </Card>
@@ -78,10 +79,10 @@ export default function BookCard({ bookData }: BookCardProps) {
         </ContextMenuItem>
         <ContextMenuItem inset>
         <EditBook 
-            formData={bookData} triggerButton={<p>Edit</p>}/>
+            formData={bookData} userData={userData} triggerButton={<p>Edit</p>}/>
         </ContextMenuItem>
         <ContextMenuItem inset>
-        <DeleteBook id={bookData?.id} triggerButton={<p>Remove</p>}/>
+        <DeleteBook id={bookData?.id} userData={userData} triggerButton={<p>Remove</p>}/>
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

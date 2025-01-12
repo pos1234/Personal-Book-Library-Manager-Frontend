@@ -1,4 +1,3 @@
-"use client";
 import {
   Sidebar,
   SidebarContent,
@@ -12,25 +11,21 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { dashboardNavigation } from "@/data/dashboardNavigation";
-import { logo } from "@/lib/image-constants";
 import { LogOut } from "lucide-react";
-// import { faviIconLogo } from "@palmjobs/lib/constants/image-constants";
-import Image from "next/image";
 import Link from "next/link";
+import SignOut from "../account/SignOut";
 
-const SidebarNavigation = ({ page }: { page?: string }) => {
+const SidebarNavigation = ({ page,userData }: { page?: string,userData:any }) => {
   const activePage = page;
+  const token = userData?.token?.access_token;
+  const user = userData?.userData
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader>
-        <Image
-          width={20}
-          height={10}
-          src={logo}
-          alt="Fidel logo"
-          className="h-10 pl-1 object-contain"
-        />
-      </SidebarHeader>
+     {token && <SidebarHeader>
+      <span className="bg-gray-200 w-fit py-2 px-2.5 rounded-full font-bold text-[12px]">
+        {user?.email.charAt(0).toUpperCase()}{user?.email.charAt(1).toUpperCase()}
+      </span>
+      </SidebarHeader>}
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
@@ -56,11 +51,13 @@ const SidebarNavigation = ({ page }: { page?: string }) => {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-
       <SidebarFooter>
         <SidebarMenuButton tooltip={"Logout"}>
-          <LogOut />
+        <SignOut triggerButton={<div className="flex gap-2 items-center">
+          <LogOut size={15}/>
           <span>Logout</span>
+        </div>}/>
+          
         </SidebarMenuButton>
       </SidebarFooter>
       <div>

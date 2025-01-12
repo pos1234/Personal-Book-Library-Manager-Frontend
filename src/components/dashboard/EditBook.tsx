@@ -20,8 +20,9 @@ interface BookFormat {
     key?:string;
   };
   triggerButton?:any
+  userData?:any
 }
-const EditBook = ({ formData,triggerButton }: BookFormat) => {
+const EditBook = ({ formData,triggerButton,userData }: BookFormat) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [loading,setLoading] = useState(false);
   const { toast } = useToast()
@@ -39,7 +40,7 @@ const EditBook = ({ formData,triggerButton }: BookFormat) => {
     
       setLoading(true)
       try {
-      const response = await updateBookmark(bookData,formData?.id);
+      const response = await updateBookmark(bookData,formData?.id,userData);
       console.log(">>> log response",response);
       
       // Close the dialog on successful submission

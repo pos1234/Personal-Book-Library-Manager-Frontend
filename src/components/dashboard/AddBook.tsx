@@ -19,8 +19,9 @@ interface BookFormat {
     coverId?: number;
     key?:string
   };
+  userData?:any
 }
-const AddBook = ({ formData }: BookFormat) => {
+const AddBook = ({ formData,userData }: BookFormat) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [loading,setLoading] = useState(false);
   const { toast } = useToast()
@@ -34,7 +35,7 @@ const AddBook = ({ formData }: BookFormat) => {
     
       setLoading(true)
       try {
-      const response = await addBookmark(bookData);
+      const response = await addBookmark(bookData,userData);
       
       // Close the dialog on successful submission
       if (!response?.error) {

@@ -80,3 +80,7 @@ export const getPageNumbers = (page = 1, totalPages = 1) => {
 export const bookmarked = (bookmarks: any[], bookKey:string) => {
   return bookmarks.some((book) => book?.key === bookKey)
 };
+
+export const parseToObject = (data:string)=>{
+return data && JSON.parse(data)
+}

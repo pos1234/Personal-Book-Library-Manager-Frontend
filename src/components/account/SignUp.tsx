@@ -10,6 +10,7 @@ import { cn, handleFormSubmit } from "@/lib/utils";
 import { signUp } from "@/repository/user-repo";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { setUserDataCookie } from "@/lib/cookies";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +28,6 @@ const [loading,setLoading] = useState(false)
       }
      const response = await signUp(credendtial)     
      if (!response?.error) {
-        // 
               toast({
                 title: "",
                 description: "Account created successfully",
@@ -37,7 +37,7 @@ const [loading,setLoading] = useState(false)
               })
 
               if(typeof window !== undefined){
-                localStorage.setItem('userData',JSON.stringify(response))
+                setUserDataCookie(JSON.stringify(response))
                 router.push('/dashboard/add')
               }
             }else{

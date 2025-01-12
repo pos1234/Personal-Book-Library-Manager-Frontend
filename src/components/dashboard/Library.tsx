@@ -1,33 +1,24 @@
 import { fetchBookmarks } from "@/repository/book-repo";
-import SearchInput from "./SearchInput";
-import Pagination from "./Pagination";
 import { getPageNumbers } from "@/lib/utils";
 
-import LibraryBookCard from "./LibraryBookCard";
 import Link from "next/link";
-import { Button } from "../ui/button";
-// import { Badge } from "@/components/ui/badge"
 
-interface BookCardProps {
-  imageUrl: string
-  title: string
-  author: string
-  note: string
-  rating: number
-  isRead: boolean
-}
+import SearchInput from "./SearchInput";
+import Pagination from "./Pagination";
+import LibraryBookCard from "./LibraryBookCard";
+import { Button } from "../ui/button";
 type pageParams = {
   searchParams: { [key: string]: string };
+  userData:any
 };
-const Library = async ({ searchParams }: pageParams) => {
+const Library = async ({ searchParams,userData }: pageParams) => {
   const page =
     typeof searchParams?.page === "string"
       ? Number(searchParams.page)
       : searchParams?.page ?? 1;
   const query = searchParams?.query || "";
-  const bookmarks = await fetchBookmarks(page)  
+  const bookmarks = await fetchBookmarks(page,userData)  
   const pageNumbers = getPageNumbers(page, bookmarks?.totalPages);
-  
   return (
     <main className="my-10 px-10">
       {bookmarks?.data && bookmarks?.data?.length>0 &&<div className="w-full flex justify-center pb-10">
@@ -53,6 +44,7 @@ const Library = async ({ searchParams }: pageParams) => {
                 <LibraryBookCard
                 bookData={book}
                 key={index}
+                userData={userData}
               />
             );
           })}

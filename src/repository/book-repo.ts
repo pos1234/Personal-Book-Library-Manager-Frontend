@@ -26,11 +26,6 @@ export interface BookDataFormat{
     rating?: number; 
     coverId?:number;
 }
-export const getUserData = ()=>{
-  const token = "kajldskjf"
-  const userId = 1
-  return {token,userId}
-}
 
 export const fetchBooks = async (
   query?: string,
@@ -59,34 +54,37 @@ export const fetchBooks = async (
   }
 };
 
-export const addBookmark = async (data?:BookDataFormat)=>{
-  const {token,userId} = getUserData()  
+export const addBookmark = async (data?:BookDataFormat,user?:any)=>{
+  const token = user?.token?.access_token
+  const userId = user?.userData?.id
  const response = await postApi(`/bookmarks/user/${userId}`, data, 'POST',token) 
  return response
 }
 
-export const updateBookmark = async (data?:BookDataFormat,id?:number)=>{
-  const {token,userId} = getUserData()  
+export const updateBookmark = async (data?:BookDataFormat,id?:number,user?:any)=>{
+  const token = user?.token?.access_token
+  const userId = user?.userData?.id   
  const response = await patchApi(`/bookmarks/user/${userId}/${id}`, data, 'PATCH',token) 
  return response
 }
 
-export const deleteBookmark = async (id?:number)=>{
-  const {token,userId} = getUserData()  
+export const deleteBookmark = async (id?:number,user?:any)=>{
+  const token = user?.token?.access_token
+  const userId = user?.userData?.id 
  const response = await deleteApi(`/bookmarks/user/${userId}/${id}`,'DELETE',token) 
  return response
 }
 
-export const fetchBookmarks = async (page?:number,limit?:number,query?:string)=>{
-  const {token,userId} = getUserData();
+export const fetchBookmarks = async (page?:number,user?:any,query?:string,limit?:number)=>{
+  const token = user?.token?.access_token
+  const userId = user?.userData?.id
   const currentPage = page || 1
   const maxLimit = limit || 8
   const urlParamsObject={
     page:currentPage,
     limit:maxLimit
-  }
+  }  
  const response = await fetchApi(`/bookmarks/user/${userId}`,token,urlParamsObject) 
  return response
 }
-
 

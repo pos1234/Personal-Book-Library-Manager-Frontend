@@ -15,7 +15,7 @@ const AccountCard = () => {
         alt="Fidel logo"
         className="h-fit mb-3 object-contain"
       />
-      <Tabs defaultValue="signin" className="w-[400px]">
+      <Tabs defaultValue="signin" className="md:w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="signin">Signin</TabsTrigger>
           <TabsTrigger value="signup">SignUp</TabsTrigger>

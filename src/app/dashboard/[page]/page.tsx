@@ -9,22 +9,26 @@ import Image from "next/image";
 import { logo } from "@/lib/image-constants";
 import SearchBooks from "@/components/dashboard/SearchBooks";
 import Library from "@/components/dashboard/Library";
-
+import { cookies } from "next/headers";
+import { parseToObject } from "@/lib/utils";
 type pageParams = {
   params: Promise<{
     page?: string;
   }>
   searchParams: Promise<{ [key: string]: string }>;
 };
-const page = async ({ params, searchParams }: pageParams) => {
-    const currentSearchParams = await searchParams
+const page = async ({ params, searchParams }: pageParams) => { 
+  const cookieStore = await cookies();
+    const cookieData = cookieStore.get('user_data');
+    const userData = parseToObject(cookieData?.value || "") 
+  const currentSearchParams = await searchParams
     const currentPage = await params
   const renderTab = () => {
     switch (currentPage?.page) {
-      case "add":
-        return <SearchBooks searchParams={currentSearchParams}/>;
+       case "add":
+         return <SearchBooks userData={userData} searchParams={currentSearchParams}/>;
       case "library":
-        return <Library searchParams={currentSearchParams}/>;
+        return <Library userData={userData} searchParams={currentSearchParams}/>;
       //   case "jobs":
       //     return <Jobs searchParams={searchParams} />;
       //   default:
@@ -34,7 +38,7 @@ const page = async ({ params, searchParams }: pageParams) => {
   return (
     <main>
       <SidebarProvider>
-        <SidebarNavigation page={currentPage?.page} />
+        <SidebarNavigation userData={userData} page={currentPage?.page} />
         <SidebarInset className="relative">
           <div
             className="h-fit p-3 flex items-center justify-between md:hidden"

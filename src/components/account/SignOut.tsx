@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import React, { useState } from "react";
 import {
   Dialog,
@@ -10,38 +10,43 @@ import {
 import { Button } from "../ui/button";
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils";
-import { deleteBookmark } from "@/repository/book-repo";
+import { useRouter } from "next/navigation";
 interface BookFormat {
-  id?:number;
   triggerButton?:any
-  userData?:any
 }
-const DeleteBook = ({ id,triggerButton,userData }: BookFormat) => {
+const SignOut = ({ triggerButton }: BookFormat) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [loading,setLoading] = useState(false);
   const { toast } = useToast()
-
+  const router = useRouter()
+ const removeTokenCookie=async()=> {
+  try {
+    document.cookie = "user_data=; path=/; max-age=0; secure; sameSite=Strict";
+    return { success: true };
+  } catch (error:any) {
+    console.error('Error removing cookie:', error);
+    return { success: false, error: error.message };
+  }
+  }
   const handleSubmit = async () => {
       setLoading(true)
       try {
-      const response = await deleteBookmark(id,userData);
-      console.log(">>> log response",response);
-      
-      // Close the dialog on successful submission
-      if (!response?.error) {
+      const response =await removeTokenCookie()
+      if (response?.success) {
         setDialogOpen(false);
         toast({
           title: "",
-          description: "Book removed from library",
+          description: "Logged out successfully",
           className: cn(
             'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-green-200'
           ),
         })
+        router.push('/')
       }else{
         setLoading(false)
         toast({
-          title: "",
-          description: "Book not removed from library",
+          title: "There was an issue with logout",
+          description: response?.error,
           className: cn(
             'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-red-200'
           ),
@@ -59,9 +64,8 @@ const DeleteBook = ({ id,triggerButton,userData }: BookFormat) => {
       </DialogTrigger>
       <DialogContent className='max-h-[80vh] overflow-y-auto thinScrollBar'>
                 <DialogTitle>
-                    Remove book?
+                    Are you sure you want to leave?
                 </DialogTitle>
-                <p>You will not be able to recover this.</p>
                 <div className='w-full flex gap-3 justify-end flex-wrap'>
                     <DialogClose asChild>
                         <Button disabled={loading} variant={"secondary"}>
@@ -69,7 +73,7 @@ const DeleteBook = ({ id,triggerButton,userData }: BookFormat) => {
                         </Button>
                     </DialogClose>
                     <Button disabled={loading} variant={loading ? "secondary" : 'default'} type="button" onClick={handleSubmit}>
-                        Delete
+                        Logout
                     </Button>
                 </div>
             </DialogContent>
@@ -77,5 +81,5 @@ const DeleteBook = ({ id,triggerButton,userData }: BookFormat) => {
   );
 };
 
-export default DeleteBook;
+export default SignOut;
 
