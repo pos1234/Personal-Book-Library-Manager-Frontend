@@ -1,4 +1,6 @@
-import { fetchBookmarks, fetchBooks } from "@/repository/book-repo";
+import Image from "next/image";
+import { FileImage } from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -7,24 +9,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
+import {
+  bookmarked,
+  getCurrentPageNumber,
+  getImageUrl,
+  getPageNumbers,
+} from "@/lib/utils";
+import { searchParamWitUserDataProps } from "@/types/util.interface";
+import { fetchBookmarks, fetchBooks } from "@/repository/book-repo";
+
+import AddBook from "./AddBook";
 import SearchInput from "./SearchInput";
 import Pagination from "./Pagination";
-import { bookmarked, getPageNumbers } from "@/lib/utils";
-import { FileImage } from "lucide-react";
-import AddBook from "./AddBook";
-type pageParams = {
-  searchParams: { [key: string]: string };
-  userData:any
-};
-const SearchBooks = async ({ searchParams,userData }: pageParams) => {
-  const page =
-    typeof searchParams?.page === "string"
-      ? Number(searchParams.page)
-      : searchParams?.page ?? 1;
+
+const SearchBooks = async ({
+  searchParams,
+  userData,
+}: searchParamWitUserDataProps) => {
+  const page = getCurrentPageNumber(searchParams);
   const query = searchParams?.query || "";
   const books = await fetchBooks(query, page, 13);
-  const bookmarks = await fetchBookmarks(page,userData)  
+  const bookmarks = await fetchBookmarks(page, userData);
   const pageNumbers = getPageNumbers(page, books?.numFound);
   return (
     <main className="my-10 px-10">
@@ -38,41 +43,43 @@ const SearchBooks = async ({ searchParams,userData }: pageParams) => {
           books?.docs &&
           books?.docs.map((book: any, index: number) => {
             const coverId = book?.cover_i;
+            const imageUrl = getImageUrl(book?.cover_i);
             const formData = {
               title: book?.title || "",
               author: book?.author_name[0] || "",
               isbn: book?.isbn[0] || "",
               coverId: book?.cover_i,
-            key:book?.key
+              key: book?.key,
             };
             return (
               <>
-              { !bookmarked(bookmarks?.data,book?.key) && 
-              <div className="w-full p-5 md:w-1/2 xl:w-1/3 2xl:w-1/4">
-              <Card key={index}>
-                <CardHeader className=" flex items-center justify-center">
-                  <CardTitle className="min-h-[200px] items-center flex">
-                    {coverId && (
-                      <Image
-                        src={`https://covers.openlibrary.org/b/id/${coverId}-L.jpg`}
-                        alt={`${book?.title}-${index}`}
-                        width={200}
-                        height={200}
-                        className="object-fit h-[300px] max-h-[300px]"
-                      />
-                    )}
-                    {!coverId && <FileImage />}
-                  </CardTitle>
-                  <CardDescription className="px-2  text-center pt-2">
-                    {book?.title}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>Author: {book?.author_name[0]}</CardContent>
-                <CardFooter>
-                  <AddBook formData={formData} userData={userData}/>
-                </CardFooter>
-              </Card>
-              </div>}
+                {!bookmarked(bookmarks?.data, book?.key) && (
+                  <div className="w-full p-5 md:w-1/2 xl:w-1/3 2xl:w-1/4">
+                    <Card key={index}>
+                      <CardHeader className=" flex items-center justify-center">
+                        <CardTitle className="min-h-[200px] items-center flex">
+                          {coverId && (
+                            <Image
+                              src={imageUrl}
+                              alt={`${book?.title}-${index}`}
+                              width={200}
+                              height={200}
+                              className="object-fit h-[300px] max-h-[300px]"
+                            />
+                          )}
+                          {!coverId && <FileImage />}
+                        </CardTitle>
+                        <CardDescription className="px-2  text-center pt-2">
+                          {book?.title}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>Author: {book?.author_name[0]}</CardContent>
+                      <CardFooter>
+                        <AddBook formData={formData} userData={userData} />
+                      </CardFooter>
+                    </Card>
+                  </div>
+                )}
               </>
             );
           })}

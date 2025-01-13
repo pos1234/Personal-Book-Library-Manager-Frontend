@@ -1,21 +1,18 @@
 "use client";
-import * as React from "react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn, handleFormSubmit } from "@/lib/utils";
+import {  handleFormSubmit, showToast } from "@/lib/utils";
 import { signUp } from "@/repository/user-repo";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/hooks/use-toast";
 import { setUserDataCookie } from "@/lib/cookies";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ email: "", password: "" });
-  const { toast } = useToast()
 const [loading,setLoading] = useState(false)
   const router = useRouter()
   const handleSubmit =() => {
@@ -28,27 +25,14 @@ const [loading,setLoading] = useState(false)
       }
      const response = await signUp(credendtial)     
      if (!response?.error) {
-              toast({
-                title: "",
-                description: "Account created successfully",
-                className: cn(
-                  'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-green-200'
-                ),
-              })
-
+              showToast("Account created successfully",'Success')                   
               if(typeof window !== undefined){
                 setUserDataCookie(JSON.stringify(response))
                 router.push('/dashboard/add')
               }
             }else{
               setLoading(false)
-              toast({
-                title: "Account not created",
-                description: response?.message,
-                className: cn(
-                  'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-red-200'
-                ),
-              })
+              showToast("Account not created please try again",'Error')                   
             }
   }
 )}

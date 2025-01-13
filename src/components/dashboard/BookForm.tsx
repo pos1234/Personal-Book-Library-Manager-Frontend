@@ -1,25 +1,17 @@
 "use client";
 import * as React from "react";
+import { Star } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Star } from "lucide-react";
-import { Switch } from "../ui/switch";
-interface FormData {
-  data?: {
-    title?: string;
-    author?: string;
-    isbn?: string;
-    readStatus?: boolean;
-    rating?: number;
-    notes?: string;
-  };
-  submit:(data:any)=>void,
-  loadingState:boolean;
-}
-const BookForm = ({ data,loadingState,submit }: FormData) => {
+import { Switch } from "@/components/ui/switch";
+
+import { FormDataProps } from "@/types/book.interface";
+
+const BookForm = ({ data,loadingState,submit }: FormDataProps) => {
   const [formData, setFormData] = React.useState({
     title: data?.title || "",
     author: data?.author || "",
@@ -69,7 +61,7 @@ const BookForm = ({ data,loadingState,submit }: FormData) => {
 
   const handleStarClick = (rating: number) => {
     setFormData((prev) => ({ ...prev, rating }));
-    setError((prev) => ({ ...prev, rating: "" })); // Clear any existing error
+    setError((prev) => ({ ...prev, rating: "" }));
   };
   const handleClear = () => {
     setFormData({

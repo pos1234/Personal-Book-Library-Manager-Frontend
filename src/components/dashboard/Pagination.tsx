@@ -1,15 +1,9 @@
+import { PaginationType } from '@/types/util.interface';
 import Link from 'next/link';
 import React from 'react';
 
-interface propType {
-    page: number;
-    pageNumbers: (string | number)[];
-    totalPages: number;
-    query?: string; // Make query optional
-    path: string;
-}
 
-const Pagination = ({ path, page, pageNumbers, totalPages, query }: propType) => {
+const Pagination = ({ path, page, pageNumbers, totalPages, query }: PaginationType) => {
     const buildUrl = (pageNumber: number | string) => {
         const baseUrl = `/${path}?page=${pageNumber}`;
         return query ? `${baseUrl}&query=${query}` : baseUrl;

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { Search } from "lucide-react";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 const SearchInput = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");

@@ -7,18 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn, handleFormSubmit} from "@/lib/utils";
+import { handleFormSubmit, showToast} from "@/lib/utils";
 import { signIn } from "@/repository/user-repo";
-import { useToast } from "@/hooks/use-toast";
 import { setUserDataCookie } from "@/lib/cookies";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ email: "", password: "" });
-  const { toast } = useToast()
 const [loading,setLoading] = useState(false)
   const router = useRouter()
-
   const handleSubmit = () => {
     handleFormSubmit(email, password, setError, async(email, password) => {
       const credendtial = {
@@ -29,26 +26,14 @@ const [loading,setLoading] = useState(false)
             }
            const response = await signIn(credendtial)     
            if (!response?.error) {
-                    toast({
-                      title: "",
-                      description: "Sign Successfull successfull",
-                      className: cn(
-                        'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-green-200'
-                      ),
-                    })                    
+            showToast("Signed in Successfully",'Success')                   
                     if(typeof window !== undefined){
                       setUserDataCookie(JSON.stringify(response))
                       router.push('/dashboard/add')
                     }
                   }else{
                     setLoading(false)
-                    toast({
-                      title: "Signin failed",
-                      description: response?.message,
-                      className: cn(
-                        'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-red-200'
-                      ),
-                    })
+                    showToast("Signin failed please try again",'Error')                   
                   }
         }
   )
@@ -86,10 +71,10 @@ const [loading,setLoading] = useState(false)
         </div>
       </CardContent>
       <CardFooter className="max-sm:flex-wrap flex justify-between">
-        <Button variant={"secondary"} onClick={handleClear}>
+        <Button disabled={loading} variant={"secondary"} onClick={handleClear}>
           Clear
         </Button>
-        <Button onClick={handleSubmit}>Signin</Button>
+        <Button disabled={loading} variant={loading ? "secondary" : 'default'} onClick={handleSubmit}>Signin</Button>
       </CardFooter>
     </Card>
   );

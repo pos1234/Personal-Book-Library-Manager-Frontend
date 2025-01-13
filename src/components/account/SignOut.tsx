@@ -7,50 +7,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
-import { useToast } from "@/hooks/use-toast"
-import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-interface BookFormat {
-  triggerButton?:any
-}
-const SignOut = ({ triggerButton }: BookFormat) => {
+import { removeTokenCookie, showToast } from "@/lib/utils";
+import { TriggerButtonProps } from "@/types/util.interface";
+
+import { Button } from "../ui/button";
+
+const SignOut = ({ triggerButton }: TriggerButtonProps) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [loading,setLoading] = useState(false);
-  const { toast } = useToast()
   const router = useRouter()
- const removeTokenCookie=async()=> {
-  try {
-    document.cookie = "user_data=; path=/; max-age=0; secure; sameSite=Strict";
-    return { success: true };
-  } catch (error:any) {
-    console.error('Error removing cookie:', error);
-    return { success: false, error: error.message };
-  }
-  }
+
   const handleSubmit = async () => {
       setLoading(true)
       try {
       const response =await removeTokenCookie()
       if (response?.success) {
         setDialogOpen(false);
-        toast({
-          title: "",
-          description: "Logged out successfully",
-          className: cn(
-            'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-green-200'
-          ),
-        })
+        showToast("Logged out successfully",'Success')                   
         router.push('/')
       }else{
         setLoading(false)
-        toast({
-          title: "There was an issue with logout",
-          description: response?.error,
-          className: cn(
-            'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-red-200'
-          ),
-        })
+        showToast("There was an issue with logout",'Error')                  
       }
     } catch (error) {
       setLoading(false)

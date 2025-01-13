@@ -7,49 +7,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
-import { useToast } from "@/hooks/use-toast"
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { showToast } from "@/lib/utils";
 import { deleteBookmark } from "@/repository/book-repo";
-interface BookFormat {
-  id?:number;
-  triggerButton?:any
-  userData?:any
-}
-const DeleteBook = ({ id,triggerButton,userData }: BookFormat) => {
+import { DeleteFormatProps } from "@/types/book.interface";
+
+const DeleteBook = ({ id,triggerButton,userData }: DeleteFormatProps) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [loading,setLoading] = useState(false);
-  const { toast } = useToast()
 
   const handleSubmit = async () => {
       setLoading(true)
       try {
-      const response = await deleteBookmark(id,userData);
-      console.log(">>> log response",response);
-      
-      // Close the dialog on successful submission
+      const response = await deleteBookmark(id,userData);      
       if (!response?.error) {
         setDialogOpen(false);
-        toast({
-          title: "",
-          description: "Book removed from library",
-          className: cn(
-            'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-green-200'
-          ),
-        })
+        showToast("Book removed from library",'Success')                   
       }else{
         setLoading(false)
-        toast({
-          title: "",
-          description: "Book not removed from library",
-          className: cn(
-            'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-red-200'
-          ),
-        })
+        showToast("Book not removed from library",'Error')                   
       }
     } catch (error) {
       setLoading(false)
-      console.error("Error adding book:", error);
+      showToast("Book not removed from library",'Error')                   
     }
   };
   return (

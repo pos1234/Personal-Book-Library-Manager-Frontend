@@ -1,3 +1,5 @@
+"use client";
+import { toast } from "@/hooks/use-toast";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -46,7 +48,6 @@ export const handleFormSubmit = (
   }
 };
 
-
 export const getPageNumbers = (page = 1, totalPages = 1) => {
   if (totalPages === 1) {
     return []; // Return an empty array if there's only one page
@@ -77,10 +78,50 @@ export const getPageNumbers = (page = 1, totalPages = 1) => {
   return pageNumbers;
 };
 
-export const bookmarked = (bookmarks: any[], bookKey:string) => {
-  return bookmarks.some((book) => book?.key === bookKey)
+export const bookmarked = (bookmarks: any[], bookKey: string) => {
+  return bookmarks.some((book) => book?.key === bookKey);
 };
 
-export const parseToObject = (data:string)=>{
-return data && JSON.parse(data)
+export const parseToObject = (data: string) => {
+  return data && JSON.parse(data);
+};
+
+type ErrorType = "Error" | "Success";
+export const showToast = (
+  description: string,
+  type: ErrorType,
+  title?: string
+) => {
+  const className =
+    type == "Success"
+      ? "top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-green-200"
+      : "top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-red-200";
+  toast({
+    title,
+    description,
+    className: cn(className),
+  });
+};
+
+export const removeTokenCookie = async () => {
+  try {
+    document.cookie = "user_data=; path=/; max-age=0; secure; sameSite=Strict";
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error removing cookie:", error);
+    return { success: false, error: error.message };
+  }
+};
+
+export const getCurrentPageNumber = (searchParams: any) => {
+  const page =
+    typeof searchParams?.page === "string"
+      ? Number(searchParams.page)
+      : searchParams?.page ?? 1;
+  return page;
+};
+
+export const getImageUrl = (coverId?:number)=>{
+  const url = process.env.NEXT_PUBLIC_IMAGE_URL || "https://covers.openlibrary.org/b/id/"
+  return `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`
 }

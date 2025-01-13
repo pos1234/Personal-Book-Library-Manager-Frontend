@@ -6,25 +6,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
-import BookForm from "./BookForm";
+import { Button } from "@/components/ui/button";
 import { addBookmark } from "@/repository/book-repo";
-import { useToast } from "@/hooks/use-toast"
-import { cn } from "@/lib/utils";
-interface BookFormat {
-  formData: {
-    title?: string;
-    author?: string;
-    isbn?: string;
-    coverId?: number;
-    key?:string
-  };
-  userData?:any
-}
-const AddBook = ({ formData,userData }: BookFormat) => {
+import { cn, showToast } from "@/lib/utils";
+import { AddBookFormatProps } from "@/types/book.interface";
+
+import BookForm from "./BookForm";
+
+const AddBook = ({ formData,userData }: AddBookFormatProps) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [loading,setLoading] = useState(false);
-  const { toast } = useToast()
 
   const handleSubmit = async (data: any) => {
     const bookData = {
@@ -32,34 +23,19 @@ const AddBook = ({ formData,userData }: BookFormat) => {
        coverId:formData?.coverId,
        ISBN:formData?.isbn, 
       ...data };
-    
       setLoading(true)
       try {
       const response = await addBookmark(bookData,userData);
-      
-      // Close the dialog on successful submission
       if (!response?.error) {
         setDialogOpen(false);
-        toast({
-          title: "",
-          description: "Book added to library",
-          className: cn(
-            'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-green-200'
-          ),
-        })
+        showToast("Book added to library",'Success')                   
       }else{
         setLoading(false)
-        toast({
-          title: "",
-          description: "Book not added to library",
-          className: cn(
-            'top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-red-200'
-          ),
-        })
+        showToast("Book not added to library",'Error')                   
       }
     } catch (error) {
       setLoading(false)
-      console.error("Error adding book:", error);
+      showToast("Book not added to library",'Error')                   
     }
   };
   return (
