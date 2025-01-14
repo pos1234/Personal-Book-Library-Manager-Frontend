@@ -31,6 +31,7 @@ const SearchBooks = async ({
   const books = await fetchBooks(query, page, 13);
   const bookmarks = await fetchBookmarks(page, userData);
   const pageNumbers = getPageNumbers(page, books?.numFound);
+  
   return (
     <main className="my-10 px-10">
       <div className="w-full flex justify-center pb-10">
@@ -47,7 +48,7 @@ const SearchBooks = async ({
             const formData = {
               title: book?.title || "",
               author: book?.author_name[0] || "",
-              isbn: book?.isbn[0] || "",
+              ISBN: book?.isbn[0] || "",
               coverId: book?.cover_i,
               key: book?.key,
             };

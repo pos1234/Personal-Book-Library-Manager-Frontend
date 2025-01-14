@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { userDataProp } from "./user.interface";
 
 export type searchParamProps = {
   searchParams: Promise<{ [key: string]: string }>;
@@ -10,7 +11,7 @@ export type TriggerButtonProps = {
 
 export interface searchParamWitUserDataProps {
   searchParams: { [key: string]: string };
-  userData: any;
+  userData: userDataProp;
 }
 
 export interface PaginationType {
@@ -20,4 +21,6 @@ export interface PaginationType {
     query?: string;
     path: string;
 }
+
+export type BookArrayAction = "update" | "delete";
 

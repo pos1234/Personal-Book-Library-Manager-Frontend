@@ -13,10 +13,7 @@ export async function fetchApi(
   query = {},
 ) {
   try {
-    // Strapi Fetch Token
-
-    // Merge default and user options
-
+  
     const mergedOptions = {
       next: {
         revalidate: Number(process.env.NEXT_PUBLIC_REVALIDATE_TIME ?? 0),
@@ -42,18 +39,13 @@ export async function fetchApi(
     const response = await fetch(requestUrl, mergedOptions);
 
     if (!response.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      //console.log"=== Status ==== ", response?.statusText);
-      //console.log"=== Body ==== ", response?.body);
-
-      // throw new Error('Failed to fetch data')
+       throw new Error('Failed to fetch data')
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    //console.log">>> Error in Fetching Data >>> ", error);
-    // throw new Error(`Please check if your server is running and you set all the required tokens.`);
+    throw new Error('Failed to fetch data')
   }
 }
 
@@ -82,7 +74,6 @@ export async function postApi(
     },
     body: JSON.stringify(data),
   });
-  console.log(">>> url query",response);
 
   return await response.json();
 }

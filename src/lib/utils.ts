@@ -1,5 +1,5 @@
-"use client";
 import { toast } from "@/hooks/use-toast";
+import { BookArrayAction } from "@/types/util.interface";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -121,7 +121,27 @@ export const getCurrentPageNumber = (searchParams: any) => {
   return page;
 };
 
-export const getImageUrl = (coverId?:number)=>{
-  const url = process.env.NEXT_PUBLIC_IMAGE_URL || "https://covers.openlibrary.org/b/id/"
-  return `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`
-}
+export const getImageUrl = (coverId?: number) => {
+  const url =
+    process.env.NEXT_PUBLIC_IMAGE_URL || "https://covers.openlibrary.org/b/id/";
+  return `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`;
+};
+
+
+export const handleArrayAction = (
+  array: any[],
+  action: BookArrayAction,
+  bookId?: number,
+  updatedData?: Partial<any>
+) => {
+  if (action === "update") {
+    return array.map((book) =>
+      book.id === bookId ? { ...book, ...updatedData } : book
+    );
+  }
+
+  if (action === "delete") {
+    return array.filter((book) => book.id !== bookId);
+  }
+  return [];
+};

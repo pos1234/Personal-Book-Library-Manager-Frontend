@@ -1,60 +1,52 @@
 import { ReactNode } from "react";
+import { BookArrayAction } from "./util.interface";
+import { userDataProp } from "./user.interface";
 
-export interface AddBookFormatProps {
-  formData: {
-    title?: string;
-    author?: string;
-    isbn?: string;
-    coverId?: number;
-    key?: string;
-  };
-  userData?: any;
+export interface BookData {
+  id?: number;
+  title?: string;
+  author?: string;
+  ISBN?: string;
+  coverId?: number;
+  key?: string;
+  notes?: string;
+  rating: number;
+  readStatus?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BookFormProps {
+  formData: Partial<BookData>;
+  userData?: userDataProp;
 }
 
 export interface FormDataProps {
-  data?: {
-    title?: string;
-    author?: string;
-    isbn?: string;
-    readStatus?: boolean;
-    rating?: number;
-    notes?: string;
-  };
+  data?: Partial<BookData>;
   submit: (data: any) => void;
   loadingState: boolean;
 }
+
+export type HandleChangeFn = (
+  action: BookArrayAction,
+  bookId?: number,
+  updateData?: Partial<BookData>
+) => void;
+
 export interface DeleteFormatProps {
   id?: number;
   triggerButton?: ReactNode;
-  userData?: any;
+  userData?: userDataProp;
+  handleChange: HandleChangeFn;
 }
 
-export interface EditBookFormatProps {
-  formData: {
-    id?: number;
-    title?: string;
-    author?: string;
-    ISBN?: string;
-    coverId?: number;
-    key?: string;
-  };
-  triggerButton?: any;
-  userData?: any;
+export interface EditBookFormatProps extends BookFormProps {
+  triggerButton:ReactNode;
+  handleChange: HandleChangeFn;
 }
 
 export interface BookCardProps {
-  bookData: {
-    id?: number;
-    createdAt?: string;
-    updateAt?: string;
-    ISBN?: string;
-    coverId?: number;
-    key?: string;
-    title: string;
-    author: string;
-    notes: string;
-    rating: number;
-    isRead: boolean;
-  };
-  userData?: any;
+  bookData: BookData;
+  userData?: userDataProp;
+  handleChange: HandleChangeFn;
 }

@@ -9,11 +9,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { addBookmark } from "@/repository/book-repo";
 import { cn, showToast } from "@/lib/utils";
-import { AddBookFormatProps } from "@/types/book.interface";
+import { BookFormProps } from "@/types/book.interface";
 
 import BookForm from "./BookForm";
 
-const AddBook = ({ formData,userData }: AddBookFormatProps) => {
+const AddBook = ({ formData,userData }: BookFormProps) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [loading,setLoading] = useState(false);
 
@@ -21,13 +21,14 @@ const AddBook = ({ formData,userData }: AddBookFormatProps) => {
     const bookData = {
        key: formData?.key,
        coverId:formData?.coverId,
-       ISBN:formData?.isbn, 
+       ISBN:formData?.ISBN, 
       ...data };
       setLoading(true)
       try {
       const response = await addBookmark(bookData,userData);
       if (!response?.error) {
         setDialogOpen(false);
+        setLoading(false)
         showToast("Book added to library",'Success')                   
       }else{
         setLoading(false)

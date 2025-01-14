@@ -12,7 +12,7 @@ import { showToast } from "@/lib/utils";
 import { deleteBookmark } from "@/repository/book-repo";
 import { DeleteFormatProps } from "@/types/book.interface";
 
-const DeleteBook = ({ id,triggerButton,userData }: DeleteFormatProps) => {
+const DeleteBook = ({ id,triggerButton,userData,handleChange }: DeleteFormatProps) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [loading,setLoading] = useState(false);
 
@@ -22,7 +22,8 @@ const DeleteBook = ({ id,triggerButton,userData }: DeleteFormatProps) => {
       const response = await deleteBookmark(id,userData);      
       if (!response?.error) {
         setDialogOpen(false);
-        showToast("Book removed from library",'Success')                   
+        showToast("Book removed from library",'Success')    
+        handleChange('delete',id)               
       }else{
         setLoading(false)
         showToast("Book not removed from library",'Error')                   

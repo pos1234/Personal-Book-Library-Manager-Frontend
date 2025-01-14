@@ -6,50 +6,66 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {updateBookmark } from "@/repository/book-repo";
-import {  showToast } from "@/lib/utils";
+import { updateBookmark } from "@/repository/book-repo";
+import { showToast } from "@/lib/utils";
 import { EditBookFormatProps } from "@/types/book.interface";
 
 import BookForm from "./BookForm";
 
-const EditBook = ({ formData,triggerButton,userData }: EditBookFormatProps) => {
+const EditBook = ({
+  formData,
+  userData,
+  triggerButton,
+  handleChange,
+}: EditBookFormatProps) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (data: any) => {
     const bookData = {
       key: formData?.key || "",
-      coverId:formData?.coverId,
-      ISBN:formData?.ISBN, 
-      author:formData?.author || "",
-      title:formData?.title,
-      readStatus:data?.readStatus,
-      rating:data?.rating,
-      notes:data?.notes
+      coverId: formData?.coverId,
+      ISBN: formData?.ISBN,
+      author: formData?.author || "",
+      title: formData?.title,
+      readStatus: data?.readStatus,
+      rating: data?.rating,
+      notes: data?.notes,
     };
-      setLoading(true)
-      try {
-      const response = await updateBookmark(bookData,formData?.id,userData);
+    const localUpdate = {
+      readStatus: data?.readStatus,
+      rating: data?.rating,
+      notes: data?.notes,
+    };
+    setLoading(true);
+    try {
+      const response = await updateBookmark(bookData, formData?.id, userData);
       if (!response?.error) {
-        showToast("Book updated",'Success')                   
+        showToast("Book updated", "Success");
         setDialogOpen(false);
-      }else{
-        setLoading(false)
-        showToast("Book not updated",'Error')                   
+        handleChange("update", formData?.id, localUpdate);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        showToast("Book not updated", "Error");
       }
     } catch (error) {
-      setLoading(false)
-      showToast("Book not updated",'Error')                   
+      setLoading(false);
+      showToast("Book not updated", "Error");
     }
   };
   return (
     <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger onClick={(e) => e.stopPropagation()}>
-      {triggerButton}
+        {triggerButton}
       </DialogTrigger>
       <DialogContent className="max-h-[80vh] w-fit overflow-y-auto thinScrollBar">
         <DialogTitle>Edit book from library</DialogTitle>
-        <BookForm data={formData} submit={handleSubmit} loadingState={loading}/>
+        <BookForm
+          data={formData}
+          submit={handleSubmit}
+          loadingState={loading}
+        />
       </DialogContent>
     </Dialog>
   );

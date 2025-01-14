@@ -4,7 +4,7 @@ interface BookFormat {
   docs:{
     title: string;
     author_name: any[];
-    isbn: string[];
+    ISBN: string[];
     cover_i: any;
     key:string
   }[],
@@ -46,7 +46,6 @@ export const fetchBooks = async (
     if (data.docs && data.docs.length > 0) {            
       return data as BookFormat;
     } else {
-      console.log('No books found');
       return
     }
   } catch (error) {
@@ -84,7 +83,10 @@ export const fetchBookmarks = async (page?:number,user?:any,query?:string,limit?
     page:currentPage,
     limit:maxLimit
   }  
- const response = await fetchApi(`/bookmarks/user/${userId}`,token,urlParamsObject) 
+  const url = query ? `/bookmarks/user/${userId}?title=${query}&author=${query}` : `/bookmarks/user/${userId}`
+  console.log(">>> log url",url);
+  
+ const response = await fetchApi(url,token,urlParamsObject) 
  return response
 }
 
