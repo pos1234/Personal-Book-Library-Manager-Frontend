@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { userDataProp } from "./user.interface";
+import { UserDataProp } from "./user.interface";
 
-export type searchParamProps = {
+export type SearchParamProps = {
   searchParams: Promise<{ [key: string]: string }>;
 };
 
@@ -11,7 +11,7 @@ export type TriggerButtonProps = {
 
 export interface searchParamWitUserDataProps {
   searchParams: { [key: string]: string };
-  userData: userDataProp;
+  userData: UserDataProp;
 }
 
 export interface PaginationType {

@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { logo } from "@/lib/image-constants";
-import { searchParamProps } from "@/types/util.interface";
+import { SearchParamProps } from "@/types/util.interface";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import Link from "next/link";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 
-const AccountCard = async({searchParams}:searchParamProps) => {
+const AccountCard = async({searchParams}:SearchParamProps) => {
   const params = await searchParams
   const activeTab = params?.activeTab ?? "signin"
   return (

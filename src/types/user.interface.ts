@@ -1,12 +1,19 @@
-export interface userDataProp{
+export interface UserDataProp{
     token?:{
         access_token?:string;
     }
     userData:{
         createdAt?:string;
         updatedAt?:string;
-        eamil?:string;
+        email?:string;
         id?:number;
         name?:string | null
+    }
+}
+
+export interface CredentialProps{
+    data:{
+        email?:string;
+        password?:string;
     }
 }

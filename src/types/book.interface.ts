@@ -1,7 +1,22 @@
 import { ReactNode } from "react";
 import { BookArrayAction } from "./util.interface";
-import { userDataProp } from "./user.interface";
+import { UserDataProp } from "./user.interface";
 
+export interface ExternalBookFormat {
+  docs: {
+    title: string;
+    author_name: any[];
+    ISBN: string[];
+    cover_i: number;
+    key: string;
+  }[];
+  numFound?: number;
+  start?: number;
+  numFoundExact?: boolean;
+  num_found: number;
+  q?: string;
+  offset?: number;
+}
 export interface BookData {
   id?: number;
   title?: string;
@@ -14,11 +29,12 @@ export interface BookData {
   readStatus?: boolean;
   createdAt?: string;
   updatedAt?: string;
+  userId?: number,
 }
 
 export interface BookFormProps {
   formData: Partial<BookData>;
-  userData?: userDataProp;
+  userData?: UserDataProp;
 }
 
 export interface FormDataProps {
@@ -36,17 +52,21 @@ export type HandleChangeFn = (
 export interface DeleteFormatProps {
   id?: number;
   triggerButton?: ReactNode;
-  userData?: userDataProp;
+  userData?: UserDataProp;
   handleChange: HandleChangeFn;
 }
 
 export interface EditBookFormatProps extends BookFormProps {
-  triggerButton:ReactNode;
+  triggerButton: ReactNode;
   handleChange: HandleChangeFn;
 }
 
 export interface BookCardProps {
   bookData: BookData;
-  userData?: userDataProp;
+  userData?: UserDataProp;
   handleChange: HandleChangeFn;
+}
+
+export interface FetchBookFormaProps {
+  docs: BookData[];
 }

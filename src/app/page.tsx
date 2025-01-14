@@ -1,8 +1,7 @@
 import AccountCard from "@/components/account/AccountCard";
-interface HomeType{
-  searchParams: Promise<{ [key: string]: string }>;
-}
-export default function Home({searchParams}:HomeType) {
+import { SearchParamProps } from "@/types/util.interface";
+
+export default function Home({searchParams}:SearchParamProps) {
   return (
     <main>
       <AccountCard searchParams={searchParams}/>

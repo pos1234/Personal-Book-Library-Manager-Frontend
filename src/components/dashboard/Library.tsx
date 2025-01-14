@@ -5,14 +5,11 @@ import { fetchBookmarks } from "@/repository/book-repo";
 import {
   getCurrentPageNumber,
   getPageNumbers,
-  handleArrayAction,
 } from "@/lib/utils";
 
 import SearchInput from "./SearchInput";
 import Pagination from "./Pagination";
-import LibraryBookCard from "./LibraryBookCard";
 import {
-  BookArrayAction,
   searchParamWitUserDataProps,
 } from "@/types/util.interface";
 import ListBooks from "./ListBooks";

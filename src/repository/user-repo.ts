@@ -1,17 +1,30 @@
 import { postApi } from "@/config/api-config";
+import { CredentialProps } from "@/types/user.interface";
 
-interface userDataType{
-    data:{
-        email?:string;
-        password?:string;
-    }
-}
-export const signUp = async ({data}:userDataType)=>{
- const response = await postApi(`/auth/signup`, data, 'POST') 
- return response
-}
+export const signUp = async ({ data }: CredentialProps) => {
+  try {
+    const response = await postApi(`/auth/signup`, data, "POST");
+    return response;
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error?.message || "Something went wrong",
+      error: error,
+      data: [],
+    };
+  }
+};
 
-export const signIn = async ({data}:userDataType)=>{
- const response = await postApi(`/auth/signin`, data, 'POST') 
- return response
-}
+export const signIn = async ({ data }: CredentialProps) => {
+  try {
+    const response = await postApi(`/auth/signin`, data, "POST");
+    return response;
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error?.message || "Something went wrong",
+      error: error,
+      data: [],
+    };
+  }
+};
