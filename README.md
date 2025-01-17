@@ -1,11 +1,11 @@
 # Bookmark Project - Frontend
 
-This is the frontend for the Bookmark Project, built with **Next.js** and **Tailwind CSS**. The project provides a user-friendly interface for users to save, view, and manage their bookmarks on a news website.
+This is the frontend for the Bookmark Project, built with **Next.js** and **Tailwind CSS**. The project provides a user-friendly interface for users to save, view, and manage their bookmarks by searching the books.
 
 ## Features
 
-- **Bookmarking Articles**: Users can easily save articles as bookmarks.
-- **View Bookmarks**: Bookmarked articles are displayed in a dedicated section.
+- **Bookmarking Books**: Users can easily save books as bookmarks.
+- **View Bookmarks**: Bookmarked books are displayed in a dedicated section.
 - **User Authentication**: Secure user login and registration (optional).
 - **Responsive Design**: Fully responsive for both desktop and mobile views.
 - **Modern Tech Stack**: Built with **Next.js** (React Framework) and styled with **Tailwind CSS** for a modern, flexible UI.
@@ -16,7 +16,7 @@ This is the frontend for the Bookmark Project, built with **Next.js** and **Tail
 - **Next.js**: A React framework for building server-side rendered web applications.
 - **Tailwind CSS**: A utility-first CSS framework for designing custom user interfaces.
 - **React**: JavaScript library for building user interfaces.
-- **Axios**: For making API requests to the backend to save and fetch bookmarks.
+- **ShadCN**: A component library for UI elements that ensures a consistent design and reusable, accessible components.
 
 ## Installation
 
@@ -30,7 +30,7 @@ Follow the steps below to set up the project locally on your machine.
 ### Getting Started
 
 1. Clone the repository:
-   git clone https://github.com/yourusername/bookmark-project-frontend.git
+   git clone https://github.com/pos1234/Personal-Book-Library-Manager-Frontend.git
    cd bookmark-project-frontend
 2. Install dependencies:
    Using npm: npm install
