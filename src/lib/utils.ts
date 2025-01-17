@@ -92,14 +92,16 @@ export const showToast = (
   type: ErrorType,
   title?: string
 ) => {
+  const backgroundColor = type === "Success" ? "green" : "red";
   const className =
     type == "Success"
-      ? "top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-green-200"
-      : "top-0 right-0 flex fixed md:max-w-fit md:top-4 md:right-4 border-green-500 bg-red-200";
+      ? "bg-green-200 top-0 right-0 flex fixed w-fit md:top-4 md:right-4 border-green-500 text-white "
+      : "top-0 right-0 flex fixed w-fit md:top-4 md:right-4 border-green-500 bg-red-200";
   toast({
     title,
     description,
     className: cn(className),
+    style: { backgroundColor, color: "white" },
   });
 };
 
@@ -126,7 +128,6 @@ export const getImageUrl = (coverId?: number) => {
     process.env.NEXT_PUBLIC_IMAGE_URL || "https://covers.openlibrary.org/b/id/";
   return `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`;
 };
-
 
 export const handleArrayAction = (
   array: any[],

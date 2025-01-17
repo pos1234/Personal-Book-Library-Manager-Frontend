@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bookmark Project - Frontend
 
-## Getting Started
+This is the frontend for the Bookmark Project, built with **Next.js** and **Tailwind CSS**. The project provides a user-friendly interface for users to save, view, and manage their bookmarks by searching the books.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Bookmarking Books**: Users can easily save books as bookmarks.
+- **View Bookmarks**: Bookmarked books are displayed in a dedicated section.
+- **User Authentication**: Secure user login and registration (optional).
+- **Responsive Design**: Fully responsive for both desktop and mobile views.
+- **Modern Tech Stack**: Built with **Next.js** (React Framework) and styled with **Tailwind CSS** for a modern, flexible UI.
+- **Efficient Performance**: Server-side rendering with Next.js ensures fast page loads.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js**: A React framework for building server-side rendered web applications.
+- **Tailwind CSS**: A utility-first CSS framework for designing custom user interfaces.
+- **React**: JavaScript library for building user interfaces.
+- **ShadCN**: A component library for UI elements that ensures a consistent design and reusable, accessible components.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Installation
 
-## Learn More
+Follow the steps below to set up the project locally on your machine.
 
-To learn more about Next.js, take a look at the following resources:
+### Prerequisites
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Node.js** (v18 or higher)
+- **npm** or **yarn**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Getting Started
 
-## Deploy on Vercel
+1. Clone the repository:
+   git clone https://github.com/pos1234/Personal-Book-Library-Manager-Frontend.git
+   cd bookmark-project-frontend
+2. Install dependencies:
+   Using npm: npm install
+   Using yarn: yarn install
+3. Run the development server:
+   Using npm: npm run dev
+   Using yarn: yarn dev
+4. Open your browser and go to http://localhost:3000 to view the app.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+src/app/: Contains all the pages for the application.
+page.tsx: Home page, displays singin/signup page.
+dashboard/add: Page that displays all books you can add bookmark.
+dashboard/library: Page that displays all bookmarked books, you can also edit and delete books.
+src/components/: Contains reusable UI components.
+src/config: Contains utility functions for making crud operation to the backend.
+src/data: Contains data for navigation.
+src/lib: Contains utility functions for interacting with the backend.
+src/respository: Contains repositories for interacting with the backend.
+src/types: Contains interfaces and types for all data types.
+styles/: Contains Tailwind CSS styles and configurations.
+globals.css: Global styles applied across the application.
+__fixtures__: Containes mock datas for test.
+__mocks__: Containes mock functions of backend calls.
+__test__: Containes test suites and test cases.
