@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {  handleFormSubmit, showToast } from "@/lib/utils";
+import { handleFormSubmit, showToast } from "@/lib/utils";
 import { signUp } from "@/repository/user-repo";
 import { useRouter } from "next/navigation";
 import { setUserDataCookie } from "@/lib/cookies";
@@ -13,29 +13,30 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ email: "", password: "" });
-const [loading,setLoading] = useState(false)
-  const router = useRouter()
-  const handleSubmit =() => {
-    handleFormSubmit(email, password, setError,async (email, password) => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const handleSubmit = () => {
+    handleFormSubmit(email, password, setError, async (email, password) => {
       const credendtial = {
-        data:{
+        data: {
           email,
-          password
+          password,
+        },
+      };
+      setLoading(true);
+      const response = await signUp(credendtial);
+      if (!response?.error) {
+        showToast("Account created successfully", "Success");
+        if (typeof window !== undefined) {
+          setUserDataCookie(JSON.stringify(response));
+          router.push("/dashboard/add");
         }
+      } else {
+        setLoading(false);
+        showToast("Account not created please try again", "Error");
       }
-     const response = await signUp(credendtial)     
-     if (!response?.error) {
-              showToast("Account created successfully",'Success')                   
-              if(typeof window !== undefined){
-                setUserDataCookie(JSON.stringify(response))
-                router.push('/dashboard/add')
-              }
-            }else{
-              setLoading(false)
-              showToast("Account not created please try again",'Error')                   
-            }
-  }
-)}
+    });
+  };
 
   const handleClear = () => {
     setEmail("");
@@ -72,7 +73,13 @@ const [loading,setLoading] = useState(false)
         <Button disabled={loading} variant={"secondary"} onClick={handleClear}>
           Clear
         </Button>
-        <Button disabled={loading} variant={loading ? "secondary" : 'default'} onClick={handleSubmit}>Signup</Button>
+        <Button
+          disabled={loading}
+          variant={loading ? "secondary" : "default"}
+          onClick={handleSubmit}
+        >
+          Signup
+        </Button>
       </CardFooter>
     </Card>
   );

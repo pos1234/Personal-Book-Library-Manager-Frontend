@@ -7,36 +7,36 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { handleFormSubmit, showToast} from "@/lib/utils";
+import { handleFormSubmit, showToast } from "@/lib/utils";
 import { signIn } from "@/repository/user-repo";
 import { setUserDataCookie } from "@/lib/cookies";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ email: "", password: "" });
-const [loading,setLoading] = useState(false)
-  const router = useRouter()
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const handleSubmit = () => {
-    handleFormSubmit(email, password, setError, async(email, password) => {
+    handleFormSubmit(email, password, setError, async (email, password) => {
       const credendtial = {
-              data:{
-                email,
-                password
-              }
-            }
-           const response = await signIn(credendtial)     
-           if (!response?.error) {
-            showToast("Signed in Successfully",'Success')                   
-                    if(typeof window !== undefined){
-                      setUserDataCookie(JSON.stringify(response))
-                      router.push('/dashboard/add')
-                    }
-                  }else{
-                    setLoading(false)
-                    showToast("Signin failed please try again",'Error')                   
-                  }
+        data: {
+          email,
+          password,
+        },
+      };
+      setLoading(true)
+      const response = await signIn(credendtial);
+      if (!response?.error) {
+        showToast("Signed in Successfully", "Success");
+        if (typeof window !== undefined) {
+          setUserDataCookie(JSON.stringify(response));
+          router.push("/dashboard/add");
         }
-  )
+      } else {
+        setLoading(false);
+        showToast("Signin failed please try again", "Error");
+      }
+    });
   };
 
   const handleClear = () => {
@@ -74,7 +74,13 @@ const [loading,setLoading] = useState(false)
         <Button disabled={loading} variant={"secondary"} onClick={handleClear}>
           Clear
         </Button>
-        <Button disabled={loading} variant={loading ? "secondary" : 'default'} onClick={handleSubmit}>Signin</Button>
+        <Button
+          disabled={loading}
+          variant={loading ? "secondary" : "default"}
+          onClick={handleSubmit}
+        >
+          Signin
+        </Button>
       </CardFooter>
     </Card>
   );
